@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { motion } from "framer-motion";
-import { salesData } from "../../utils";
+import { trendsData } from "../../utils";
 
 const SalesTrendChart = () => {
   return (
@@ -22,7 +22,7 @@ const SalesTrendChart = () => {
       <h2 className="text-xl font-semibold text-gray-100 mb-4">Sales Trend</h2>
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
-          <LineChart data={salesData}>
+          <LineChart data={trendsData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis dataKey="month" stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
