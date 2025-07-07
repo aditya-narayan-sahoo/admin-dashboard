@@ -1,44 +1,58 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SIDEBAR_ITEMS } from "../../utils";
 import { AnimatePresence, motion } from "framer-motion";
+
 const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
+  const { pathname } = useLocation();
 
   return (
     <motion.div
-      className={`relative z-10 transition-all duration-200 ease-in-out flex-shrink-0 ${
-        isSidebarOpen ? "w-64" : "w-20"
-      }`}
-      animate={{ width: isSidebarOpen ? 256 : 80 }}
+      animate={{ width: isOpen ? 256 : 80 }}
+      className="transition-all duration-300 ease-in-out h-full bg-gray-800 bg-opacity-60 backdrop-blur-md border-r border-gray-700 flex flex-col p-4 overflow-hidden"
     >
-      <div className="h-full bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 flex flex-col border-r border-gray-700">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 rounded-full hover:bg-gray-700 transition-colors max-w-fit"
-        >
-          <Menu size={24} />
-        </motion.button>
+      {/* Toggle Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label="Toggle sidebar"
+        aria-expanded={isOpen}
+        className="p-2 rounded-full hover:bg-gray-700 transition-colors w-fit"
+      >
+        <Menu size={22} />
+      </motion.button>
 
-        <nav className="mt-8 flex-grow">
-          {SIDEBAR_ITEMS.map((item) => (
-            <Link key={item.href} to={item.href}>
-              <motion.div className="flex items-center p-4 text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors mb-2">
+      {/* Nav Items */}
+      <nav className="mt-6 flex flex-col gap-2">
+        {SIDEBAR_ITEMS.map((item) => {
+          const isActive = pathname === item.href;
+
+          return (
+            <Link key={item.href} to={item.href} className="group">
+              <motion.div
+                layout
+                className={`flex items-center p-3 rounded-md transition-colors duration-200 ${
+                  isActive
+                    ? "bg-gray-700 text-white"
+                    : "hover:bg-gray-700 text-gray-300"
+                }`}
+              >
                 <item.icon
                   size={20}
-                  style={{ color: item.color, minWidth: "20px" }}
+                  style={{ color: item.color }}
+                  className="shrink-0"
                 />
-                <AnimatePresence>
-                  {isSidebarOpen && (
+                <AnimatePresence initial={false}>
+                  {isOpen && (
                     <motion.span
-                      className="ml-4 whitespace-nowrap"
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{ duration: 0.1, delay: 0.2 }}
+                      className="ml-3 whitespace-nowrap overflow-hidden"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.15 }}
                     >
                       {item.name}
                     </motion.span>
@@ -46,10 +60,11 @@ const Sidebar = () => {
                 </AnimatePresence>
               </motion.div>
             </Link>
-          ))}
-        </nav>
-      </div>
+          );
+        })}
+      </nav>
     </motion.div>
   );
 };
+
 export default Sidebar;
