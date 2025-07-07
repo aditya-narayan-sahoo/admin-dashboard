@@ -12,16 +12,17 @@ import { USER_DEMOGRAPHICS_COLORS, userDemographicsData } from "../../utils";
 const UserDemographicsChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 lg:col-span-2"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
+      transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-md rounded-2xl border border-gray-700 p-4 sm:p-6 lg:col-span-2"
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-lg font-semibold text-gray-100 mb-4">
         User Demographics
       </h2>
-      <div style={{ width: "100%", height: 300 }}>
-        <ResponsiveContainer>
+
+      <div className="h-[18rem] sm:h-[20rem]">
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={userDemographicsData}
@@ -33,6 +34,8 @@ const UserDemographicsChart = () => {
               label={({ name, percent }) =>
                 `${name} ${(percent * 100).toFixed(0)}%`
               }
+              labelLine={false}
+              isAnimationActive={false}
             >
               {userDemographicsData.map((entry, index) => (
                 <Cell
@@ -42,21 +45,31 @@ const UserDemographicsChart = () => {
                       index % USER_DEMOGRAPHICS_COLORS.length
                     ]
                   }
+                  stroke="#1F2937"
+                  strokeWidth={2}
                 />
               ))}
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4B5563",
+                backgroundColor: "#1F2937",
+                border: "1px solid #4B5563",
+                borderRadius: "8px",
               }}
-              itemStyle={{ color: "#E5E7EB" }}
+              itemStyle={{ color: "#E5E7EB", fontSize: "0.875rem" }}
             />
-            <Legend />
+            <Legend
+              wrapperStyle={{
+                fontSize: "0.75rem",
+                color: "#D1D5DB",
+                paddingTop: "4px",
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
     </motion.div>
   );
 };
+
 export default UserDemographicsChart;

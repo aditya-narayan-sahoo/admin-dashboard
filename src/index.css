@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+/* Scrollbar styling for dark mode */
+::-webkit-scrollbar {
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* gray-700 */
+  border-radius: 4px;
+}
